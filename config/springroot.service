@@ -1,0 +1,16 @@
+[Unit]
+Description=A Spring Boot Application for API Requests
+After=network.target
+
+[Service]
+User=user
+WorkingDirectory=/home/user/Nginx-Script-Deployment
+ExecStart=/usr/bin/gradle bootRun
+SuccessExitStatus=143
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=springroot
+
+[Install]
+WantedBy=multi-user.target
