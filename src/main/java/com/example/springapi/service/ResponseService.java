@@ -2,14 +2,39 @@ package com.example.springapi.service;
 
 import com.example.springapi.api.model.ResponseModel;
 import org.springframework.stereotype.Service;
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.IOException;
+
+import java.io.*;
 
 @Service
 public class ResponseService {
     public ResponseModel getResponse(String name) {
-        return new ResponseModel("Welcome " + name  + "! I'm a Response from Spring API");
+        String filename = "data.txt"; // Specify your file name here
+        String lastRow = null;
+
+        try {
+            // Create a FileReader object
+            FileReader fr = new FileReader(filename);
+
+            // Wrap the FileReader with a BufferedReader for efficiency
+            BufferedReader br = new BufferedReader(fr);
+
+            // Read the file line by line until reaching the end
+            String line;
+            while ((line = br.readLine()) != null) {
+                lastRow = line;
+            }
+
+            // Close the BufferedReader
+            br.close();
+        } catch (IOException e) {
+            System.err.println("Error reading file: " + e.getMessage());
+        }
+
+        if (lastRow != null) {
+            return new ResponseModel(lastRow);
+        } else {
+            return new ResponseModel("File is empty or could not read from it.");
+        }
     }
 
     public ResponseModel storeData(String temperature) {
